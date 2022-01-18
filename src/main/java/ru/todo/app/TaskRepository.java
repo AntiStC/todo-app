@@ -9,18 +9,8 @@ public class TaskRepository {
 
     public void getAllTasks() throws SQLException, ClassNotFoundException {
 
-
-        Class.forName("jdbc:postgresql://localhost:5432/todo-app");
-        System.out.println("Драйвер подключен");
-
-        String url = "jdbc:postgresql://localhost:5432/todo-app";
-        Properties props = new Properties();
-        props.setProperty("user", "fred");
-        props.setProperty("password", "secret");
-        props.setProperty("ssl", "false");
-
-        Connection conn = DriverManager.getConnection(url, props);
-
-
+        Class.forName("org.postgresql.Driver");
+        Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/todo-app","postgres", "admin");
+        connection.close();
     }
 }
