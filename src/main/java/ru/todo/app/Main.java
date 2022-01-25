@@ -8,18 +8,17 @@ import com.pengrad.telegrambot.request.SendMessage;
 import java.sql.SQLException;
 import java.util.*;
 
+import ru.todo.app.TaskRepository;
+
 public class Main {
     private static List<Task> taskList;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException {
 
-        try {
-            new TaskRepository().getAllTasks();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
+        TaskRepository.getDBConnection();
+
+        TaskRepository.createDbTable();
+
         taskList = new ArrayList<>();
         TelegramBot bot = new TelegramBot("2097883864:AAEptnYscfJeqb7b0DsHISrr__ROrqMixyE");
         bot.setUpdatesListener(updates -> {
