@@ -6,6 +6,7 @@ import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
 
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.*;
 
 import ru.todo.app.TaskRepository;
@@ -13,13 +14,14 @@ import ru.todo.app.TaskRepository;
 public class Main {
     private static List<Task> taskList;
 
+
     public static void main(String[] args) throws SQLException {
 
         TaskRepository.getDBConnection();
 
-        TaskRepository.createDbTable();
 
         taskList = new ArrayList<>();
+
         TelegramBot bot = new TelegramBot("2097883864:AAEptnYscfJeqb7b0DsHISrr__ROrqMixyE");
         bot.setUpdatesListener(updates -> {
             Update update = updates.get(0);
@@ -48,16 +50,16 @@ public class Main {
 
     private static String createTask(String action, long chatId) {
         taskList.add(new Task(action, chatId));
-        return "Задача создана.";
-    }
-
-    private static String getAll(long chatId) {
-        String response = "";
-        for (Task task : taskList) {
-            if (task.getChatId() == chatId) {
-                response += task;
-            }
+            return "Задача создана.";
         }
-        return response;
+
+        private static String getAll ( long chatId){
+            String response = "";
+            for (Task task : taskList) {
+                if (task.getChatId() == chatId) {
+                    response += task;
+                }
+            }
+            return response;
+        }
     }
-}
