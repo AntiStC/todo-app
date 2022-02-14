@@ -1,19 +1,31 @@
-package ru.todo.app;
+package ru.todo.app.entity;
 
+import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
+@Entity
 public class Task {
     private Date creationDate;
     private String name;
     private boolean done;
     private Long chatId;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    Task(String name, Long chatId) {
+
+    public Task(String name, Long chatId) {
         this.name = name;
         this.chatId = chatId;
         creationDate = new Date();
         done = false;
     }
+
+    public Task() {
+
+    }
+
 
     public String getName() {
         return name;
@@ -47,8 +59,19 @@ public class Task {
         this.chatId = chatId;
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+
     @Override
     public String toString() {
         return name + (done ? " [+] " : " [-] ") + "\n";
     }
+
+
 }

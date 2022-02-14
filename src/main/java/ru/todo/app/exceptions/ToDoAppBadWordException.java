@@ -1,4 +1,4 @@
-package ru.todo.app;
+package ru.todo.app.exceptions;
 
 public class ToDoAppBadWordException extends Exception {
 }
