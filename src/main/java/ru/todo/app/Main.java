@@ -4,6 +4,7 @@ import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.UpdatesListener;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
+import org.jetbrains.annotations.NotNull;
 import ru.todo.app.entity.Task;
 import ru.todo.app.services.TaskService;
 
@@ -21,15 +22,11 @@ public class Main {
             long chatId = update.message().chat().id();
             String response = "";
             switch (action) {
-                /*case "/get-all":
+                case "/get-all":
                     response = getAll(chatId);
-                    break;*/
+                    break;
                 default:
-                    try {
-                        response = createTask(action, chatId);
-                    } catch (SQLException throwables) {
-                        throwables.printStackTrace();
-                    }
+                    response = createTask(action, chatId);
                     break;
             }
             bot.execute(new SendMessage(chatId, response));
@@ -44,20 +41,22 @@ public class Main {
 //        }
 //    }
 
-    private static String createTask(String action, long chatId) throws SQLException {
+    private static String createTask(String action, long chatId) {
         TaskService taskService = new TaskService();
-        Task task = new Task(action,chatId);
+        Task task = new Task(action, chatId);
         taskService.saveTask(task);
         return "Задача создана.";
     }
 
-    /*private static String getAll(long chatId) {
+    private static String getAll(long chatId) {
+        TaskService taskService = new TaskService();
+        Task task = new Task();
         String response = "";
-        for (Task task : taskList) {
-            if (task.getChatId() == chatId) {
-                response += task;
-            }
+        if (task.getChatId() == chatId) {
+            response += taskService.getAllTasks();
         }
-        return response;*/
+        return response;
     }
+
+}
 

@@ -15,10 +15,5 @@
         <property name="hibernate.format_sql">true</property>
         <property name="hibernate.highlight_sql">true</property>
 
-        <property name="default_schema">public</property>
-        <property name="hibernate.current_session_context_class">thread</property>
-        <mapping class="ru.todo.app.entity.Task"/>
-
-
     </session-factory>
 </hibernate-configuration>

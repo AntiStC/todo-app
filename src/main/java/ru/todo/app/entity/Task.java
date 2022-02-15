@@ -2,9 +2,9 @@ package ru.todo.app.entity;
 
 import javax.persistence.*;
 import java.util.Date;
-import java.util.List;
 
 @Entity
+@Table(name = "task",schema = "public",catalog = "todo-app")
 public class Task {
     private Date creationDate;
     private String name;

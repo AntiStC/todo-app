@@ -2,32 +2,31 @@ package ru.todo.app.utils;
 
 
 import org.hibernate.SessionFactory;
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
+import ru.todo.app.entity.Task;
 
-import java.io.File;
 
 public class HibernateUtil {
 
-    private static SessionFactory sessionFactory = buildSessionFactory(); // Настройка и работа с сессиями (фабрика сессий)
+    private static SessionFactory sessionFactory;
 
-    // фабрика для создания сессий
-    private static SessionFactory buildSessionFactory() {
-        try {
-            return new Configuration().configure(new File("src\\main\\resources\\hibernate.cfg.xml")).buildSessionFactory();
-        } catch (Throwable ex) {
-            System.err.println("Initial SessionFactory creation failed." + ex);
-            throw new ExceptionInInitializerError(ex);
-        }
+    private HibernateUtil() {
+
     }
 
-
-    // метод вызывается когда потребуется SessionFactory
     public static SessionFactory getSessionFactory() {
+        if (sessionFactory == null) {
+            try {
+                Configuration configuration = new Configuration().configure();
+                configuration.addAnnotatedClass(Task.class);
+                StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder().
+                        applySettings(configuration.getProperties());
+                sessionFactory = configuration.buildSessionFactory(builder.build());
+            } catch (Exception e) {
+                System.out.println("Attention!" + e);
+            }
+        }
         return sessionFactory;
-    }
-
-    // закрыть все соединения с помощью SessionFactory
-    public static void shutdown() {
-        getSessionFactory().close();
     }
 }
