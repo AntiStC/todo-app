@@ -40,15 +40,10 @@ public class Main {
 
                 String response = "";
 
-                String[] actions = action.split(":");
-                if (actions.length == 2) {
-                    String answer = actions[0];
-                    String text = actions[1];
-                    if ("/resolve".equals(answer)) {
-                        response = text;
-                    }
-                }
-                if (action.equals("/start")) {
+                String[] actions = action.split(": ");
+                    if ("/resolve".equals(actions[0])) {
+                        response = actions[1];
+                    }else if (action.equals("/start")) {
                     response = " Начните вводить задачу, при созданной задаче отобразится надпись " +
                             "'Задача создана.'\n '/get-all' - отобразит все сохраненные задачи";
                 } else if (action.equals("/get-all")) {
