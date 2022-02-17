@@ -41,9 +41,13 @@ public class Main {
                 String response = "";
 
                 String[] actions = action.split(": ");
-                    if ("/resolve".equals(actions[0])) {
-                        response = actions[1];
-                    }else if (action.equals("/start")) {
+                if ("/resolve".equals(actions[0])) {
+                    response = actions[1];
+                } else if ("/delete".equals(actions[0])) {
+                    response = actions[1];
+                } else if (action.equals("/delete-all")) {
+                    response = "delete-all";
+                } else if (action.equals("/start")) {
                     response = " Начните вводить задачу, при созданной задаче отобразится надпись " +
                             "'Задача создана.'\n '/get-all' - отобразит все сохраненные задачи";
                 } else if (action.equals("/get-all")) {
