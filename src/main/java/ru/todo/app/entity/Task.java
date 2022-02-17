@@ -6,9 +6,18 @@ import java.util.Date;
 @Entity
 @Table(name = "task",schema = "public",catalog = "todo-app")
 public class Task {
+
+    @Column(name = "creationDate")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Date creationDate;
+
+    @Column(name = "name")
     private String name;
+
+    @Column(name = "done")
     private boolean done;
+
+    @Column(name = "chatid")
     private Long chatId;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

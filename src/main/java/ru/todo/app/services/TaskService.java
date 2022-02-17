@@ -29,7 +29,7 @@ public class TaskService {
         taskDao.update(task);
     }
 
-    public List<Task> getAllTasks(){
-        return taskDao.getAll();
+    public List<Task> getAllTasks(long chatId){
+        return taskDao.getAll(chatId);
     }
 }

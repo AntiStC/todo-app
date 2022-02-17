@@ -2,6 +2,7 @@ package ru.todo.app.dao;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 import ru.todo.app.entity.Task;
 import ru.todo.app.utils.HibernateUtil;
 
@@ -37,9 +38,12 @@ public class TaskDao {
         session.close();
     }
 
-    public List<Task> getAll(){
-        List<Task> tasks= (List<Task>) HibernateUtil.getSessionFactory().
-                openSession().createQuery("From Task").list();
-        return tasks;
+
+    public List getAll(long chatId){
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Query query = session.createQuery("from Task where chatId = : chatId");
+        query.setParameter("chatId", chatId);
+        List list = query.list();
+        return list;
     }
 }

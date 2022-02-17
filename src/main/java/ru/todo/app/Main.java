@@ -2,38 +2,68 @@ package ru.todo.app;
 
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.UpdatesListener;
+import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.model.Update;
+import com.pengrad.telegrambot.request.GetUpdates;
 import com.pengrad.telegrambot.request.SendMessage;
-import org.jetbrains.annotations.NotNull;
+import com.pengrad.telegrambot.response.GetUpdatesResponse;
 import ru.todo.app.entity.Task;
 import ru.todo.app.services.TaskService;
 
-import java.sql.SQLException;
-import java.util.*;
+import java.io.IOException;
+import java.util.List;
+
 
 public class Main {
+    private static final String TELEGRAM_TOKEN = "2097883864:AAEptnYscfJeqb7b0DsHISrr__ROrqMixyE";
+    private static int offset = 0;
+    private static Long counter = 0L;
 
-    public static void main(String[] args) {
 
-        TelegramBot bot = new TelegramBot("2097883864:AAEptnYscfJeqb7b0DsHISrr__ROrqMixyE");
-        bot.setUpdatesListener(updates -> {
-            Update update = updates.get(0);
-            String action = update.message().text();
-            long chatId = update.message().chat().id();
-            String response = "";
-            switch (action) {
-                case "/get-all":
+    public static void main(String[] args) throws IOException {
+
+        //create bot
+        TelegramBot bot = new TelegramBot(TELEGRAM_TOKEN);
+        while (true) {
+
+            //receiving incoming messages
+            GetUpdates getUpdates = new GetUpdates().limit(1).offset(offset).timeout(0); //at once only 1 message
+            GetUpdatesResponse updatesResponse = bot.execute(getUpdates);
+            List<Update> updates = updatesResponse.updates();
+
+            if (!updates.isEmpty()) {
+                Update update = updates.get(0);
+                Message message = update.message();
+                String action = message.text();
+                long chatId = update.message().chat().id();
+
+
+                String response = "";
+
+                String[] actions = action.split(":");
+                if (actions.length == 2) {
+                    String answer = actions[0];
+                    String text = actions[1];
+                    if ("/resolve".equals(answer)) {
+                        response = text;
+                    }
+                }
+                if (action.equals("/start")) {
+                    response = " Начните вводить задачу, при созданной задаче отобразится надпись " +
+                            "'Задача создана.'\n '/get-all' - отобразит все сохраненные задачи";
+                } else if (action.equals("/get-all")) {
                     response = getAll(chatId);
-                    break;
-                default:
+                } else {
                     response = createTask(action, chatId);
-                    break;
-            }
-            bot.execute(new SendMessage(chatId, response));
-            return UpdatesListener.CONFIRMED_UPDATES_ALL;
-        });
+                }
+                SendMessage sendMessage = new SendMessage(message.chat().id(), response);
+                bot.execute(sendMessage);
 
+                offset = update.updateId() + 1; //mark incoming message as readen
+            }
+        }
     }
+
 
 //    private static void inspection(String action) {
 //        if (list.contain(action)) {
@@ -50,13 +80,10 @@ public class Main {
 
     private static String getAll(long chatId) {
         TaskService taskService = new TaskService();
-        Task task = new Task();
         String response = "";
-        if (task.getChatId() == chatId) {
-            response += taskService.getAllTasks();
-        }
+        Task task = new Task();
+        response += taskService.getAllTasks(chatId);
         return response;
     }
-
 }
 

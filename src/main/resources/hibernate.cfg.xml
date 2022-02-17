@@ -12,8 +12,8 @@
         <property name="hibernate.connection.characterEncoding">utf8</property>
 
         <property name="hibernate.show_sql">true</property>
-        <property name="hibernate.format_sql">true</property>
-        <property name="hibernate.highlight_sql">true</property>
+
+        <mapping class="ru.todo.app.entity.Task"/>
 
     </session-factory>
 </hibernate-configuration>
