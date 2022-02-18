@@ -7,29 +7,29 @@ import java.util.List;
 
 public class TaskService {
 
-    private TaskDao taskDao=new TaskDao();
+    private TaskDao taskDao = new TaskDao();
 
-    public TaskService(){
+    public TaskService() {
 
     }
 
-    public Task findTask(String name){
-        return taskDao.findByName(name);
+    public void saveTask(Task task) {
+        taskDao.saveTask(task);
     }
 
-    public void saveTask(Task task){
-        taskDao.save(task);
+    public void deleteAllTask(long chatId) {
+        taskDao.deleteAllTask(chatId);
     }
 
-    public void deleteTask(Task task){
-        taskDao.delete(task);
+    public void deleteTask(long chatId, String actions) {
+        taskDao.deleteTask(chatId, actions);
     }
 
-    public void updateTask(Task task){
-        taskDao.update(task);
+    public void resolveTask(long chatId, String actions) {
+        taskDao.resolveTask(chatId, actions);
     }
 
-    public List<Task> getAllTasks(long chatId){
+    public List<Task> getAllTasks(long chatId) {
         return taskDao.getAll(chatId);
     }
 }

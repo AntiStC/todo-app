@@ -10,11 +10,8 @@ import java.util.List;
 
 public class TaskDao {
 
-    public Task findByName(String name) {
-        return HibernateUtil.getSessionFactory().openSession().get(Task.class, name);
-    }
 
-    public void save(Task task) {
+    public void saveTask(Task task) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction transaction = session.beginTransaction();
         session.save(task);
@@ -22,24 +19,43 @@ public class TaskDao {
         session.close();
     }
 
-    public void update(Task task) {
+    public void resolveTask(long chatId, String actions) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction transaction = session.beginTransaction();
-        session.update(task);
+        Query query = session.createQuery("UPDATE Task SET done = true" +
+                " where chatId = : chatId and body = : body");
+        query.setParameter("chatId", chatId).
+                setParameter("body", actions);
+        query.executeUpdate();
         transaction.commit();
         session.close();
     }
 
-    public void delete(Task task) {
+    public void deleteAllTask(long chatId) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction transaction = session.beginTransaction();
-        session.delete(task);
+        Query query = session.createQuery(
+                "delete from Task where chatId = : chatId");
+        query.setParameter("chatId", chatId);
+        query.executeUpdate();
         transaction.commit();
         session.close();
     }
 
+    public void deleteTask(long chatId, String actions) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction transaction = session.beginTransaction();
+        Query query = session.createQuery(
+                "delete from Task where chatId = : chatId " +
+                        "and body = : body");
+        query.setParameter("chatId", chatId).
+                setParameter("body", actions);
+        query.executeUpdate();
+        transaction.commit();
+        session.close();
+    }
 
-    public List getAll(long chatId){
+    public List getAll(long chatId) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         Query query = session.createQuery("from Task where chatId = : chatId");
         query.setParameter("chatId", chatId);

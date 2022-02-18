@@ -11,8 +11,8 @@ public class Task {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Date creationDate;
 
-    @Column(name = "name")
-    private String name;
+    @Column(name = "body")
+    private String body;
 
     @Column(name = "done")
     private boolean done;
@@ -24,8 +24,8 @@ public class Task {
     private Long id;
 
 
-    public Task(String name, Long chatId) {
-        this.name = name;
+    public Task(String body, Long chatId) {
+        this.body = body;
         this.chatId = chatId;
         creationDate = new Date();
         done = false;
@@ -36,12 +36,12 @@ public class Task {
     }
 
 
-    public String getName() {
-        return name;
+    public String getBody() {
+        return body;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setBody(String body) {
+        this.body = body;
     }
 
     public Date getCreationDate() {
@@ -79,7 +79,7 @@ public class Task {
 
     @Override
     public String toString() {
-        return name + (done ? " [+] " : " [-] ") + "\n";
+        return body + (done ? " [ + ] " : " [ - ] ") + "\n";
     }
 
 

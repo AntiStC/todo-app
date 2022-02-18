@@ -1,7 +1,6 @@
 package ru.todo.app;
 
 import com.pengrad.telegrambot.TelegramBot;
-import com.pengrad.telegrambot.UpdatesListener;
 import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.GetUpdates;
@@ -10,7 +9,6 @@ import com.pengrad.telegrambot.response.GetUpdatesResponse;
 import ru.todo.app.entity.Task;
 import ru.todo.app.services.TaskService;
 
-import java.io.IOException;
 import java.util.List;
 
 
@@ -20,7 +18,7 @@ public class Main {
     private static Long counter = 0L;
 
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
 
         //create bot
         TelegramBot bot = new TelegramBot(TELEGRAM_TOKEN);
@@ -42,11 +40,11 @@ public class Main {
 
                 String[] actions = action.split(": ");
                 if ("/resolve".equals(actions[0])) {
-                    response = actions[1];
+                    response = resolveTask(chatId, actions[1]);
                 } else if ("/delete".equals(actions[0])) {
-                    response = actions[1];
+                    response = deleteTask(chatId, actions[1]);
                 } else if (action.equals("/delete-all")) {
-                    response = "delete-all";
+                    response = deleteAllTask(chatId);
                 } else if (action.equals("/start")) {
                     response = " Начните вводить задачу, при созданной задаче отобразится надпись " +
                             "'Задача создана.'\n '/get-all' - отобразит все сохраненные задачи";
@@ -80,9 +78,26 @@ public class Main {
     private static String getAll(long chatId) {
         TaskService taskService = new TaskService();
         String response = "";
-        Task task = new Task();
         response += taskService.getAllTasks(chatId);
         return response;
+    }
+
+    private static String resolveTask(long chatId, String actions) {
+        TaskService taskService = new TaskService();
+        taskService.resolveTask(chatId, actions);
+        return "Задача выполнена!";
+    }
+
+    private static String deleteTask(long chatId, String actions) {
+        TaskService taskService = new TaskService();
+        taskService.deleteTask(chatId, actions);
+        return "Задача удалена!";
+    }
+
+    private static String deleteAllTask(long chatId) {
+        TaskService taskService = new TaskService();
+        taskService.deleteAllTask(chatId);
+        return "Все задачи удалены!";
     }
 }
 
