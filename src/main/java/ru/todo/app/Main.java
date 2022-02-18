@@ -13,7 +13,7 @@ import java.util.List;
 
 
 public class Main {
-    private static final String TELEGRAM_TOKEN = "2097883864:AAEptnYscfJeqb7b0DsHISrr__ROrqMixyE";
+    private static final String TELEGRAM_TOKEN = "";
     private static int offset = 0;
     private static Long counter = 0L;
 
